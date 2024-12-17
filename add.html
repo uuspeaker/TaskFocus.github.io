@@ -135,6 +135,16 @@
     </div>
 
     <script>
+        // 获取用户ID
+        function getUserId() {
+            return localStorage.getItem('userId') || 'default_user';
+        }
+
+        // 获取用户特定的存储键
+        function getUserStorageKey() {
+            return `tasks_${getUserId()}`;
+        }
+
         function saveTask() {
             const content = document.getElementById('taskContent').value.trim();
             const important = document.getElementById('important').checked;
@@ -144,14 +154,14 @@
                 return;
             }
 
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            const tasks = JSON.parse(localStorage.getItem(getUserStorageKey()) || '[]');
             tasks.push({
                 content,
                 important,
                 completed: false
             });
 
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            localStorage.setItem(getUserStorageKey(), JSON.stringify(tasks));
             window.location.href = './index.html';
         }
     </script>

@@ -139,9 +139,19 @@
         const urlParams = new URLSearchParams(window.location.search);
         const taskId = parseInt(urlParams.get('id'));
 
+        // 获取用户ID
+        function getUserId() {
+            return localStorage.getItem('userId') || 'default_user';
+        }
+
+        // 获取用户特定的存储键
+        function getUserStorageKey() {
+            return `tasks_${getUserId()}`;
+        }
+
         // 从localStorage获取任务数据
         function getTasks() {
-            const tasks = localStorage.getItem('tasks');
+            const tasks = localStorage.getItem(getUserStorageKey());
             return tasks ? JSON.parse(tasks) : [];
         }
 
@@ -176,7 +186,7 @@
                 important
             };
 
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            localStorage.setItem(getUserStorageKey(), JSON.stringify(tasks));
             window.location.href = './index.html';
         }
 

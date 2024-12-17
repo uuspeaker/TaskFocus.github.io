@@ -286,9 +286,29 @@
     </div>
 
     <script>
+        // 生成随机用户ID
+        function generateUserId() {
+            return 'user_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // 获取或创建用户ID
+        function getUserId() {
+            let userId = localStorage.getItem('userId');
+            if (!userId) {
+                userId = generateUserId();
+                localStorage.setItem('userId', userId);
+            }
+            return userId;
+        }
+
+        // 获取用户特定的存储键
+        function getUserStorageKey() {
+            return `tasks_${getUserId()}`;
+        }
+
         // 从localStorage获取任务数据
         function getTasks() {
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            const tasks = JSON.parse(localStorage.getItem(getUserStorageKey()) || '[]');
             return tasks;
         }
 
@@ -296,7 +316,7 @@
         function toggleTask(index) {
             const tasks = getTasks();
             tasks[index].completed = !tasks[index].completed;
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            saveTasks(tasks);
             renderTasks();
         }
 
@@ -304,7 +324,7 @@
         function deleteTask(index) {
             const tasks = getTasks();
             tasks.splice(index, 1);
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            saveTasks(tasks);
             renderTasks();
         }
 
@@ -333,12 +353,12 @@
 
             // 生成任务HTML
             const generateTaskHTML = (task, index) => `
-                <div class="task-item ${task.important ? 'important' : ''}" onclick="location.href='edit.html?id=${index}'">
+                <div class="task-item ${task.important ? 'important' : ''}" onclick="handleTaskClick(event, ${index})">
                     <input 
                         type="checkbox" 
                         class="task-checkbox" 
                         ${task.completed ? 'checked' : ''}
-                        onchange="event.stopPropagation(); toggleTask(${index})"
+                        onchange="toggleTask(${index})"
                     >
                     <div class="task-content">
                         ${task.content}
@@ -367,6 +387,21 @@
 
         // 页面加载时渲染任务列表
         window.onload = renderTasks;
+
+        // 添加任务点击处理函数
+        function handleTaskClick(event, index) {
+            // 如果���击的是复选框或删除按钮，不进行跳转
+            if (event.target.classList.contains('task-checkbox') || 
+                event.target.classList.contains('delete-button')) {
+                return;
+            }
+            location.href = `edit.html?id=${index}`;
+        }
+
+        // 保存任务数据
+        function saveTasks(tasks) {
+            localStorage.setItem(getUserStorageKey(), JSON.stringify(tasks));
+        }
     </script>
 </body>
 </html> 
