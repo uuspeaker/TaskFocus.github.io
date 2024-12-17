@@ -266,7 +266,7 @@
                 <!-- 任务列表将通过JavaScript动态生成 -->
             </div>
 
-            <button class="add-button" onclick="location.href='add.html'">+</button>
+            <button class="add-button" onclick="window.location.href='./add.html'">+</button>
         </div>
 
         <div class="bottom-nav">
@@ -288,8 +288,8 @@
     <script>
         // 从localStorage获取任务数据
         function getTasks() {
-            const tasks = localStorage.getItem('tasks');
-            return tasks ? JSON.parse(tasks) : [];
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            return tasks;
         }
 
         // 更新任务状态
