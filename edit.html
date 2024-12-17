@@ -141,7 +141,12 @@
 
         // 获取用户ID
         function getUserId() {
-            return localStorage.getItem('userId') || 'default_user';
+            let userId = localStorage.getItem('userId');
+            if (!userId) {
+                userId = 'user_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('userId', userId);
+            }
+            return userId;
         }
 
         // 获取用户特定的存储键
