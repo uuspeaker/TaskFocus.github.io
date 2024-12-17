@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专注清单</title>
+    <style>
+        /* 基础样式 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 容器样式 */
+        .container {
+            width: 390px;
+            height: 844px;
+            margin: 0 auto;
+            background: #ffffff;
+            position: relative;
+            overflow-y: auto;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        /* 头部样式 */
+        .header {
+            color: #1d1d1f;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #1d1d1f;
+        }
+
+        /* 任务列表样式 */
+        .task-list {
+            padding: 10px;
+            position: relative;
+        }
+
+        .task-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #e5e5e5;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .task-item:active {
+            background: #f5f5f5;
+        }
+
+        .task-item.important {
+            background: #f2f7ff;
+            border: 1px solid #007AFF;
+        }
+
+        .task-checkbox {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #d2d2d7;
+            border-radius: 50%;
+            margin-right: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .task-checkbox:checked {
+            background: #007AFF;
+            border-color: #007AFF;
+        }
+
+        .task-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .task-content {
+            flex: 1;
+            font-size: 17px;
+            color: #1d1d1f;
+            font-weight: 400;
+        }
+
+        /* 添加按钮样式 */
+        .add-button {
+            position: absolute;
+            bottom: 90px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #007AFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
+        }
+
+        .add-button:active {
+            transform: scale(0.95);
+            background: #0071eb;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #86868b;
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.2s;
+        }
+
+        .nav-item.active {
+            color: #007AFF;
+        }
+
+        .nav-item.pro::after {
+            content: 'Pro';
+            position: absolute;
+            top: -5px;
+            right: -15px;
+            background: #ff9800;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        /* 统计面板 */
+        .stats-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 10px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .task-actions {
+            position: absolute;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-button, .delete-button {
+            position: absolute;
+            right: 15px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            cursor: pointer;
+            opacity: 0.7;
+            font-size: 18px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #86868b;
+            font-size: 17px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="header">
+                <h1>我的任务</h1>
+            </div>
+
+            <div class="task-list" id="taskList">
+                <!-- 任务列表将通过JavaScript动态生成 -->
+            </div>
+
+            <button class="add-button" onclick="location.href='add.html'">+</button>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="index.html" class="nav-item active">
+                <span class="nav-icon">📝</span>
+                <span>任务</span>
+            </a>
+            <a href="preorder.html" class="nav-item">
+                <span class="nav-icon">💡</span>
+                <span>升级</span>
+            </a>
+            <a href="feedback.html" class="nav-item">
+                <span class="nav-icon">💭</span>
+                <span>反馈</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 从localStorage获取任务数据
+        function getTasks() {
+            const tasks = localStorage.getItem('tasks');
+            return tasks ? JSON.parse(tasks) : [];
+        }
+
+        // 更新任务状态
+        function toggleTask(index) {
+            const tasks = getTasks();
+            tasks[index].completed = !tasks[index].completed;
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        // 添加删除任务函数
+        function deleteTask(index) {
+            const tasks = getTasks();
+            tasks.splice(index, 1);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        // 显示帮助信息
+        function showHelp() {
+            alert('使用说明：\n\n1. 点击右下角的加号添加新任务\n2. 点击复选框标记任务完成\n3. 点击删除按钮删除任务');
+        }
+
+        // 渲染任务列表
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            const tasks = getTasks();
+
+            if (tasks.length === 0) {
+                taskList.innerHTML = `
+                    <div class="empty-state">
+                        还没有任务，点击右下角添加新任务
+                    </div>
+                `;
+                return;
+            }
+
+            // 分离重要任务和普通任务
+            const importantTasks = tasks.filter(task => task.important);
+            const normalTasks = tasks.filter(task => !task.important);
+
+            // 生成任务HTML
+            const generateTaskHTML = (task, index) => `
+                <div class="task-item ${task.important ? 'important' : ''}" onclick="location.href='edit.html?id=${index}'">
+                    <input 
+                        type="checkbox" 
+                        class="task-checkbox" 
+                        ${task.completed ? 'checked' : ''}
+                        onchange="event.stopPropagation(); toggleTask(${index})"
+                    >
+                    <div class="task-content">
+                        ${task.content}
+                    </div>
+                    <div class="delete-button" onclick="event.stopPropagation(); deleteTask(${index})">×</div>
+                </div>
+            `;
+
+            // 组装HTML
+            taskList.innerHTML = `
+                ${importantTasks.length > 0 ? `
+                    <div class="task-section">
+                        <div class="section-title">重要任务</div>
+                        ${importantTasks.map((task, index) => generateTaskHTML(task, index)).join('')}
+                    </div>
+                ` : ''}
+                
+                ${normalTasks.length > 0 ? `
+                    <div class="task-section">
+                        <div class="section-title">普通任务</div>
+                        ${normalTasks.map((task, index) => generateTaskHTML(task, tasks.indexOf(task))).join('')}
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        // 页面加载时渲染任务列表
+        window.onload = renderTasks;
+    </script>
+</body>
+</html> 

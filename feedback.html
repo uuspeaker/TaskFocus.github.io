@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>功能建议 - 专注清单</title>
+    <style>
+        /* 基础样式 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 390px;
+            height: 844px;
+            margin: 0 auto;
+            background: #ffffff;
+            position: relative;
+            overflow-y: auto;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header {
+            color: #1d1d1f;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #007AFF;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+            font-weight: 600;
+            font-size: 17px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 17px;
+            resize: none;
+            height: 200px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 17px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .description {
+            font-size: 15px;
+            color: #86868b;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .submit-button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .submit-button:active {
+            background: #0071eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="history.back()">←</button>
+            <h1>功能建议</h1>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <p>我们非常重视您的反馈，它将帮助我们打造更好的产品。</p>
+                <p>点击下方按钮，告诉我们您的想法和建议。</p>
+            </div>
+
+            <button class="submit-button" onclick="window.location.href='https://wj.qq.com/s2/17083832/c6c0/'">
+                提供反馈
+            </button>
+        </div>
+    </div>
+</body>
+</html> 

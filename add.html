@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加任务 - 专注清单</title>
+    <style>
+        /* 基础样式 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 容器样式 */
+        .container {
+            width: 390px;
+            height: 844px;
+            margin: 0 auto;
+            background: #ffffff;
+            position: relative;
+            overflow-y: auto;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header {
+            color: #1d1d1f;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #007AFF;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 17px;
+            resize: none;
+            height: 100px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .important-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .important-toggle input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .save-button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .save-button:active {
+            background: #0071eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="history.back()">←</button>
+            <h1>添加任务</h1>
+        </div>
+
+        <div class="form-container">
+            <div class="form-group">
+                <label>任务内容</label>
+                <textarea id="taskContent" placeholder="请输入任务内容..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <div class="important-toggle">
+                    <input type="checkbox" id="important">
+                    <label for="important">标记为重要任务</label>
+                </div>
+            </div>
+
+            <button class="save-button" onclick="saveTask()">保存任务</button>
+        </div>
+    </div>
+
+    <script>
+        function saveTask() {
+            const content = document.getElementById('taskContent').value.trim();
+            const important = document.getElementById('important').checked;
+
+            if (!content) {
+                alert('请输入任务内容');
+                return;
+            }
+
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            tasks.push({
+                content,
+                important,
+                completed: false
+            });
+
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            history.back();
+        }
+    </script>
+</body>
+</html> 
